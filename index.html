@@ -7,6 +7,7 @@
 <title>MovieHub</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -18,6 +19,8 @@ body{
     background:#111;
     color:white;
 }
+
+/* Header */
 
 .header{
     background:#000;
@@ -31,6 +34,8 @@ body{
     z-index:100;
 }
 
+/* Search Box */
+
 .search-container{
     text-align:center;
     padding:20px;
@@ -43,64 +48,83 @@ body{
     border:none;
     border-radius:8px;
     font-size:18px;
+    outline:none;
 }
 
+/* Movie Grid */
+
 .container{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(500px,1fr));
     gap:20px;
     padding:20px;
 }
 
+/* Movie Card */
+
 .movie-card{
     text-decoration:none;
+    display:block;
 }
 
 .card{
-    width:220px;
+    width:100%;
     background:#1d1d1d;
-    border-radius:10px;
+    border-radius:12px;
     overflow:hidden;
-    transition:.3s;
+    transition:0.3s;
+    box-shadow:0 0 10px rgba(0,0,0,0.4);
 }
 
 .card:hover{
-    transform:scale(1.05);
+    transform:scale(1.03);
 }
 
 .card img{
     width:100%;
-    height:320px;
+    aspect-ratio:16/9;
     object-fit:cover;
+    display:block;
 }
 
 .card h3{
     text-align:center;
-    padding:12px;
+    padding:15px;
     color:white;
+    font-size:20px;
+    margin:0;
 }
 
-@media(max-width:600px){
-    .card{
-        width:160px;
-    }
+/* Mobile */
 
-    .card img{
-        height:240px;
+@media(max-width:768px){
+
+    .container{
+        grid-template-columns:1fr;
     }
 
     .header{
         font-size:30px;
     }
+
+    .card h3{
+        font-size:18px;
+    }
+
+    #searchBox{
+        width:95%;
+    }
 }
+
 </style>
 
 </head>
 
 <body>
 
-<div class="header">🎬 MovieHub</div>
+<div class="header">
+🎬 MovieHub
+</div>
 
 <div class="search-container">
 <input
@@ -121,6 +145,9 @@ fetch("movies.json")
 .then(data => {
     allMovies = data;
     displayMovies(data);
+})
+.catch(error => {
+    console.error("Movies JSON load error:", error);
 });
 
 function displayMovies(movies){
@@ -138,8 +165,12 @@ function displayMovies(movies){
            class="movie-card">
 
             <div class="card">
-                <img src="${movie.image}">
+
+                <img src="${movie.image}"
+                     alt="${movie.title}">
+
                 <h3>${movie.title}</h3>
+
             </div>
 
         </a>
