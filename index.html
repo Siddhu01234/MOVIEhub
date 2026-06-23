@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MovieHub</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#111;
+    color:white;
+}
+
+.header{
+    background:#000;
+    color:#ffcc00;
+    text-align:center;
+    padding:20px;
+    font-size:40px;
+    font-weight:bold;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.search-container{
+    text-align:center;
+    padding:20px;
+}
+
+#searchBox{
+    width:80%;
+    max-width:500px;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    font-size:18px;
+}
+
+.container{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:20px;
+    padding:20px;
+}
+
+.movie-card{
+    text-decoration:none;
+}
+
+.card{
+    width:220px;
+    background:#1d1d1d;
+    border-radius:10px;
+    overflow:hidden;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:scale(1.05);
+}
+
+.card img{
+    width:100%;
+    height:320px;
+    object-fit:cover;
+}
+
+.card h3{
+    text-align:center;
+    padding:12px;
+    color:white;
+}
+
+@media(max-width:600px){
+    .card{
+        width:160px;
+    }
+
+    .card img{
+        height:240px;
+    }
+
+    .header{
+        font-size:30px;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="header">🎬 MovieHub</div>
+
+<div class="search-container">
+<input
+type="text"
+id="searchBox"
+placeholder="Search Movies..."
+onkeyup="searchMovies()">
+</div>
+
+<div class="container" id="movieContainer"></div>
+
+<script>
+
+let allMovies = [];
+
+fetch("movies.json")
+.then(response => response.json())
+.then(data => {
+    allMovies = data;
+    displayMovies(data);
+});
+
+function displayMovies(movies){
+
+    const container =
+    document.getElementById("movieContainer");
+
+    container.innerHTML = "";
+
+    movies.forEach(movie => {
+
+        container.innerHTML += `
+        <a href="${movie.telegram}"
+           target="_blank"
+           class="movie-card">
+
+            <div class="card">
+                <img src="${movie.image}">
+                <h3>${movie.title}</h3>
+            </div>
+
+        </a>
+        `;
+    });
+}
+
+function searchMovies(){
+
+    let search =
+    document.getElementById("searchBox")
+    .value
+    .toLowerCase();
+
+    let filtered =
+    allMovies.filter(movie =>
+        movie.title
+        .toLowerCase()
+        .includes(search)
+    );
+
+    displayMovies(filtered);
+}
+
+</script>
+
+</body>
+</html>
